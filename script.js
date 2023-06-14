@@ -2,6 +2,7 @@
 fetch('https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/master/global-temperature.json')
   .then(response => response.json())
   .then(data => {
+    
     // Constants
     const dataset = data.monthlyVariance;
     const baseTemperature = data.baseTemperature;
@@ -40,22 +41,23 @@ fetch('https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/maste
       .tickFormat(d3.format("d"))
       .tickSizeOuter(0);
 
-    const yAxis = d3.axisLeft(yScale)
-      .tickFormat(d => {
-        const date = new Date(0);
-        date.setUTCMonth(d);
-        return d3.timeFormat("%B")(date);
-      });
-
     svg.append("g")
       .attr("id", "x-axis")
       .attr("transform", "translate(0," + height + ")")
       .call(xAxis);
 
-    svg.append("g")
-      .attr("id", "y-axis")
-      .call(yAxis);
-
+      const monthNames = [
+        "January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+      ];
+      
+      const yAxis = d3.axisLeft(yScale)
+        .tickFormat(d => monthNames[d]);
+      
+      svg.append("g")
+        .attr("id", "y-axis")
+        .call(yAxis);
+      
       
     // Heatmap cells
     svg.selectAll(".cell")
